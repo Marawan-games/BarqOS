@@ -26,6 +26,10 @@ static volatile uint64_t limine_requests_start_marker[] = LIMINE_REQUESTS_START_
 __attribute__((used, section(".limine_requests_end")))
 static volatile uint64_t limine_requests_end_marker[] = LIMINE_REQUESTS_END_MARKER;
 
+
+// Copied from OSdev wiki for future understanding & really intalizing them
+
+
 // GCC and Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
 // Implement them as the C specification mandates.
@@ -109,14 +113,16 @@ void kmain(void) {
     print_step("Fast like lightning (Maybe)" , 0xFFC107 , 1);
     current_y += (280 - 167);
     print_step("Checking Frambuffer .....\n" , 0xd43100 , 1);
-    print_step("(Maybe)" , 0x00d48d , 1);
+    print_step("(Maybe , If U R here !)" , 0x00d48d , 1);
     print_step("Checking GDT .....\n" , 0xd43100 , 1);
-    gdt_flush();
+    gdt_init();
     print_step("(Maybe)" , 0x00d48d , 1);
     print_step("Checking IDT .....\n" , 0xd43100 , 1);
-    print_step("(still working on that)" , 0x00d48d , 1);
+    idt_init();
+    print_step("(Maybe)" , 0x00d48d , 1);
     print_step("Checking Panic/Interrupt Handler .....\n" , 0xd43100 , 1);
-    print_step("(still working on that)" , 0x00d48d , 1);
+    asm volatile ("int $3");
+    print_step("Panic handler isn't working !" , 0xd43100 , 1);
 
     cursor_x = 1;
     cursor_y = 1;
@@ -127,6 +133,11 @@ void kmain(void) {
 //////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+
+void interrupt_handler_c(){
+    print_step("(Interrupt Triggered!)" , 0xFFFF00 , 1);
+    hcf();
+}
 
 // Halt and catch fire function.
 void hcf(void) {

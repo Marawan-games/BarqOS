@@ -5,6 +5,7 @@
 
 #include <screen.h>
 
-extern void gdt_flush();
+extern void gdt_init();
+extern void idt_init();
 
 #endif

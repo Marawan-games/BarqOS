@@ -39,7 +39,7 @@ xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
 
 cd ~/Documents/MyOS
 
-cp iso_root/boot/BarqOS /run/media/mrv/AB8B-5070/boot/BarqOS
+cp iso_root/boot/BarqOS /run/media/mrv/AB8B-5070/boot/BarqOS #That's only for putting it in my real device UEFI boot menu
 
 qemu-system-x86_64 \
  -no-reboot \

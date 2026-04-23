@@ -1,6 +1,8 @@
 [bits 64]
+default rel
 
-global gdt_flush
+
+global gdt_init
 
 section .data
 align 16
@@ -45,7 +47,7 @@ gdtr:
 
 section .text
 
-gdt_flush:
+gdt_init:
     lgdt [rel gdtr]
     mov ax , 0x10 ;Kernel Mode Data Segment
     mov ds , ax ;Data segment = 0x10 

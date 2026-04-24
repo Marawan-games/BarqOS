@@ -4,69 +4,169 @@ default rel
 global idt_init
 
 section .bss
+
 align 16
-idt: ;IDT table
-    resb 256 * 16    ; 256 entries, each 16 bytes (Interrupt Gate)
+idt: 
+    resb 256 * 16    
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 section .data
+
+align 16
 idtr:
-    dw (256 * 16) - 1    ;limit (first 2 bytes) = (size - 1)
-    dq idt              ;base addr of IDT table
+    dw (256 * 16) - 1
+    dq idt
 
-section .text
-%macro set_gate 3
-
-    mov rax, %2
-    lea rbx, [rel idt] ;get the first gate addr in ^ Long Mode ^
-    add rbx, (%1 * 16) ;move to the gate giveen in %1
-
-    ; Offset Low
-    mov [rbx], ax
-    ; Selector
-    mov word [rbx + 2], %3
-    ; Flags (0x8E = Interrupt Gate)
-    mov byte [rbx + 5], 0x8E
-    ; Offset Mid
-    shr rax, 16
-    mov [rbx + 6], ax
-    ; Offset High
-    shr rax, 16
-    mov [rbx + 8], eax
+%macro ISR 1
+global isr%1
+isr%1:
+    push 0
+    push %1
+    jmp common_interrupt_handler
 %endmacro
 
-; simple IDT_INIT
-extern soft_interrupt_handler_c
+%macro ISR_ERR 1
+global isr%1
+isr%1:
+    push %1
+    jmp common_interrupt_handler
+%endmacro
 
-idt_init:
-    ; our handlers
-    set_gate 3, software_handler_wrapper, 0x08 ;the OSdeving interruppt
-    ;set_gate 1, keyboard_handler, 0x08
+%macro set_gate 3
+    mov rax, %2             ; Load address directly
+    lea rdi, [rel idt]      
+    mov rsi, %1
+    shl rsi, 4              
+    add rdi, rsi        
+
+    mov [rdi], ax           ; Low 16 bits
+    mov word [rdi + 2], %3  ; Selector
+    mov byte [rdi + 5], 0x8E ; Attributes
     
-    lidt [rel idtr]
-    ret
+    shr rax, 16
+    mov [rdi + 6], ax       ; Mid 16 bits
+    
+    shr rax, 16
+    mov [rdi + 8], eax      ; High 32 bits
+%endmacro
 
-software_handler_wrapper:
-    ; Save registers
+%macro pushAll 0
     push rax
     push rcx
     push rdx
     push rsi
     push rdi
+    push r8
+    push r9
+    push r10
+    push r11
+    push rbx
+    push rbp
+    push r12
+    push r13
+    push r14
+    push r15
+%endmacro
 
-    mov rdi, rsp
-    call soft_interrupt_handler_c
-
+%macro popAll 0
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbp
+    pop rbx
+    pop r11
+    pop r10
+    pop r9
+    pop r8
     pop rdi
     pop rsi
     pop rdx
     pop rcx
     pop rax
+%endmacro
 
-    ; الحل هنا: لازم نضيف SS و RSP يدوياً عشان الـ iretq يلاقي الـ 5 قيم
-    mov rax, ss
-    push rax            ; ن push الـ SS الأصلي
-    push rsp            ; ن push الـ RSP الأصلي (قبل ما نعمل push للـ SS)
-    
-    ; لازم نعدل الـ RSP عشان الـ iretq ي pop القيم اللي ضفناها
-    ; لاحظ: بعد الـ push للـ SS والـ RSP، الـ RSP اتغير، لازم نرجع نظبطه
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+section .text
+
+idt_init:
+    %assign i 0
+    %rep 256
+        set_gate i, isr %+ i, 0x08
+        %assign i i+1
+    %endrep
+
+    ; 3. Load IDT
+    lidt [rel idtr]
+    ret
+
+ISR             0x0
+ISR             0x1
+ISR             0x2
+ISR             0x3
+ISR             0x4
+ISR             0x5
+ISR             0x6
+ISR             0x7
+ISR_ERR         0x8
+ISR             0x9
+ISR_ERR         0xA
+ISR_ERR         0XB
+ISR_ERR         0XC
+ISR_ERR         0XD
+ISR_ERR         0XE
+ISR             0XF
+ISR             0X10
+ISR_ERR         0X11
+ISR             0X12
+ISR             0X13
+ISR             0X14
+ISR             0X15
+ISR             0X16
+ISR             0X17
+ISR             0X18
+ISR             0X19
+ISR             0X1A
+ISR             0X1B
+ISR             0X1C
+ISR_ERR         0X1D
+ISR_ERR         0X1E
+ISR             0X1F
+;complete the ISRs
+%assign i 0x20
+%rep    0xFF - 0x20 + 1
+    ISR i
+    %assign i i+1
+%endrep
+
+
+extern handler_c
+
+common_interrupt_handler:
+    pushAll
+
+    mov ax, ds
+    push rax
+
+    mov        ax, 0x10
+    mov        ds, ax
+    mov        es, ax
+    mov        fs, ax
+    mov        gs, ax
+
+    mov rdi, rsp
+    call    handler_c
+
+    pop        rax
+    mov        ds, ax
+    mov        es, ax
+    mov        fs, ax
+    mov        gs, ax
+
+    popAll
+
+    add        rsp, 16
+    sti
     iretq

@@ -2,7 +2,7 @@
 #define PANIC_H
 
 #include <screen.h>
-void soft_interrupt_handler_c();
+void handler_c();
 
 
 #endif

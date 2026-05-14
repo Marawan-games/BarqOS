@@ -85,7 +85,9 @@ override CPPFLAGS := \
 override NASMFLAGS := \
     -f elf64 \
     $(patsubst -g,-g -F dwarf,$(NASMFLAGS)) \
-    -Wall
+    -Wall \
+    -w-reloc-abs-qword \
+    -w-reloc-rel-dword
 
 # Internal linker flags that should not be changed by the user.
 override LDFLAGS += \

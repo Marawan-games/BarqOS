@@ -1,24 +1,17 @@
-#include <panic.h>
+#include "panic.h"
+void c_divide_by_zero_handler() {
+    // 1. اقلب الخلفية كلها لون أحمر غامق بتاعة الـ Panic الشيك (مثلاً 0x8B0000 أو 0x550000)
+    cls(0x4A0000); 
 
-
-struct interrupt_frame {
-    // By pushALL
-    uint64_t r15, r14, r13, r12, rbp, rbx, r11, r10, r9, r8, rdi, rsi, rdx, rcx, rax;
-    uint64_t ds; // alone
-    uint64_t vector;
-    uint64_t error_code;
-    uint64_t rip, cs, rflags, rsp, ss;
-};
-
-void handler_c(struct interrupt_frame *frame){
-    if (frame->vector == 3) {
-        print_step("(Interrupt Triggered!)" , 0xFFFF00 , 1);
+    current_y = 267;
+    
+    print_step(" !!! BARQ OS - KERNEL PANIC !!! " , 0xFFFFFF , 1);
+    print_step("SYSTEM HALTED DUE TO UNHANDLED EXCEPTION:" , 0xFFC107 , 1);
+    print_step("-> EXCEPTION 0x00: DIVIDE BY ZERO ERROR" , 0xFFFFFF , 1);
+    print_step("The processor was forced to halt to protect your hardware." , 0xDDDDDD , 1);
+    
+    // 4. اشنق المعالج هنا
+    while(1) {
+        __asm__("hlt");
     }
-    else {
-        //print_step( frame->vector , 0xFF0000 , 1);
-        print_step("Interrupt found!" , 0xFF0000 , 1);
-        hcf();
-    }
-    //hcf();
-    return;
 }

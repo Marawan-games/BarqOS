@@ -2,7 +2,7 @@
 #define PANIC_H
 
 #include <screen.h>
-void handler_c();
+void c_divide_by_zero_handler();
 
 
 #endif

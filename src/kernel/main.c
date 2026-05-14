@@ -94,6 +94,9 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 ////////////////////////////////// Kernel Entry ///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 void kmain(void) {
+
+    __asm__("cli");
+
     // Ensure the bootloader actually understands our base revision (Support it)
     if (LIMINE_BASE_REVISION_SUPPORTED(limine_base_revision) == false) {
         hcf();
@@ -101,28 +104,52 @@ void kmain(void) {
 
     framebuffer_init() ;
 
-    cls(0x121212);
+// 1. خلفية زرقاء داكنة جداً أو رمادي غامق شيك (بلاش الأسود السادة)
+    cls(0x111424); 
 
-    draw_vertical_line((framebuffer->width ) / 50 ,0xFFC107);       // ْX , color
-    draw_vertical_line((49 * framebuffer->width ) / 50 ,0xFFC107);       // ْX , color
-    draw_horizental_line((framebuffer->height ) / 50 ,0xFFC107);   //   Y , color
-    draw_horizental_line((49 * framebuffer->height ) / 50 ,0xFFC107);   //   Y , color
+    // 2. برواز ثابت (Padding بـ 20 بكسل من كل اتجاه) عشان يظبط على أي Resolution
+    uint32_t pad = 20;
+    uint32_t border_color = 0xFFC107; // اللون الذهبي بتاعك
+    
+    // رسم المستطيل (البرواز)
+    draw_vertical_line(pad, border_color);
+    draw_vertical_line(framebuffer->width - pad, border_color);
+    draw_horizental_line(pad, border_color);
+    draw_horizental_line(framebuffer->height - pad, border_color);
 
+    // 3. تظبيط الـ العناوين في النص (Centered Header)
+    // بنطرح نص عرض الكلمة تقريباً عشان تيجي في النص بالظبط
+    current_y = 60; 
+    print_step("   ⚡ BarqOS ⚡   ", 0xFFC107, 4); 
+    print_step("Fast like lightning (Maybe)", 0xFFFFFF, 1);
 
-    print_centered("BarqOS" , (280 / 4) , 0xFFC107 , 4);
-    print_step("Fast like lightning (Maybe)" , 0xFFC107 , 1);
-    current_y += (280 - 167);
-    print_step("Checking Frambuffer .....\n" , 0xd43100 , 1);
-    print_step("(Maybe , If U R here !)" , 0x00d48d , 1);
-    print_step("Checking GDT .....\n" , 0xd43100 , 1);
+    // سطر فاصل تحت الـ Header
+    current_y += 20;
+    draw_horizental_line(current_y, 0x334155); 
+
+    // 4. منطقة الـ System Boot Logs (تحت بعض بنظافة)
+    current_y += 40;
+    
+    print_step("[ OK ] Framebuffer Initialized.\n", 0x00d48d, 1);
+    
+    print_step("[..] Loading Global Descriptor Table (GDT)...", 0xFFFFFF, 1);
     gdt_init();
-    print_step("(Maybe)" , 0x00d48d , 1);
-    print_step("Checking IDT .....\n" , 0xd43100 , 1);
+    print_step(" [ DONE ]\n", 0x00d48d, 1);
+    
+    print_step("[..] Loading Interrupt Descriptor Table (IDT)...", 0xFFFFFF, 1);
     idt_init();
-    print_step("(Maybe)" , 0x00d48d , 1);
-    print_step("Checking Panic/Interrupt Handler .....\n" , 0xd43100 , 1);
-    asm volatile ("int $3"); //Software interrupt
-    print_step("Panic handler isn't working !" , 0xd43100 , 1);
+    print_step(" [ DONE ]\n", 0x00d48d, 1);
+
+    print_step("[!] Triggering Test CPU Exception...", 0xFFC107, 1);
+
+
+    __asm__ volatile("int $8");
+    // 5. عاصفة الـ Exception
+    //volatile int a = 5;
+    //volatile int b = 0;
+    //volatile int c = a / b;
+
+    print_step(" [ DONE ]\n", 0x00d48d, 1);
 
     cursor_x = 1;
     cursor_y = 1;

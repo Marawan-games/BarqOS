@@ -24,5 +24,6 @@ void print(const char *str , uint32_t color , int scale) ;
 void hcf(void);
 void print_centered(const char* text, int y, uint32_t color, int scale);
 void print_step(char* text, uint32_t color, int scale);
+void uint_to_string(uint64_t num, char* out_str);
 
 #endif

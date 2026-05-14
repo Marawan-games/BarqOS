@@ -7,12 +7,14 @@ struct limine_framebuffer *framebuffer = NULL; //Forward declaration
 
 
 void cls(uint32_t color) {
+    // 1- safty check
     if (framebuffer == NULL) return;
     framebuffer = framebuffer_request.response->framebuffers[0];
-    volatile uint32_t *fb_ptr = framebuffer->address;
-    for (size_t y = 0; y < framebuffer->height; y++) {
-        for (size_t x = 0; x < framebuffer->width; x++) {
-            fb_ptr[y * (framebuffer->pitch / 4) + x] = color; // Y * (Pitch / 4) + X 
+    for (uint32_t y =0 ; y < framebuffer->height ; y++) {
+        uint32_t *row = (uint32_t * )((uint8_t * )framebuffer->address + (y * framebuffer->pitch));
+
+        for (uint32_t  x = 0 ; x < framebuffer->width ; x++) {
+            row[x] = color;
         }
     }
 }
@@ -96,7 +98,10 @@ void print(const char *str , uint32_t color , int scale) {
 }
 
 
-void print_centered(const char* text, int y, uint32_t color, int scale) {
+
+int current_y = 167; // under the header
+
+void print_step(char* text, uint32_t color, int scale) {
     int char_width = 16 * scale; 
     int str_len = 0;
     
@@ -106,15 +111,31 @@ void print_centered(const char* text, int y, uint32_t color, int scale) {
     int x = (framebuffer->width - (str_len * char_width)) / 2;
     
     cursor_x = x;
-    cursor_y = y;
+    cursor_y = current_y;
     print(text, color, scale);
+    current_y += (28 * scale); // y is increasing to be in the next line
 }
 
-int current_y = 167; // under the header
+// دالة بتحول أي رقم لنص وتدعم لحد خانتين أو تلاتة (مضمونة ومفهومة)
+void uint_to_string(uint64_t num, char* out_str) {
+    int i = 0;
+    if (num == 0) {
+        out_str[i++] = '0';
+    } else {
+        // بناخد الخانات من اليمين للشمال
+        while (num > 0) {
+            out_str[i++] = (num % 10) + '0';
+            num /= 10;
+        }
+    }
+    out_str[i] = '\0';
 
-void print_step(char* text, uint32_t color, int scale) {
-    print_centered(text, current_y, color, scale);
-    current_y += (28 * scale); // y is increasing to be in the next line
+    // بنعكس الـ string عشان يطلع الترتيب مظبوط
+    for (int j = 0; j < i / 2; j++) {
+        char temp = out_str[j];
+        out_str[j] = out_str[i - 1 - j];
+        out_str[i - 1 - j] = temp;
+    }
 }
 
 const uint8_t font16x16[] = {

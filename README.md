@@ -29,6 +29,7 @@ The BQ0 Beta strips away the overhead to focus on the absolute fundamentals:
 ---
 
 ## 🚀 How to Run & Test
+### Linux 🐧 :
 To test the BQ0 Beta on your local machine using the **QEMU emulator**, follow these steps:
 
 1. Clone the repository:
@@ -40,3 +41,16 @@ To test the BQ0 Beta on your local machine using the **QEMU emulator**, follow t
   qemu-system-x86_64 --version
 ```
 if you don't have it, just search how to install it on your OS
+3. run it!:
+```bash
+   sh run.sh
+```
+### Windows 🪟 :
+If you are on Windows, you can test the BQ0 Beta using QEMU by following these steps:
+
+1. Download the repo or clone it if you have Git Bash.
+2. Ensure QEMU is installed and added to your System PATH.
+3. Run the setup using the batch script:
+```bash
+   run.bat
+```

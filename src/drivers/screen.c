@@ -97,15 +97,12 @@ void print(const char *str , uint32_t color , int scale) {
     }
 }
 
-
-
 int current_y = 167; // under the header
 
 void print_step(char* text, uint32_t color, int scale) {
     int char_width = 16 * scale; 
     int str_len = 0;
     
-
     while (text[str_len] != '\0') str_len++;
     
     int x = (framebuffer->width - (str_len * char_width)) / 2;
@@ -113,16 +110,14 @@ void print_step(char* text, uint32_t color, int scale) {
     cursor_x = x;
     cursor_y = current_y;
     print(text, color, scale);
-    current_y += (28 * scale); // y is increasing to be in the next line
+    current_y += (28 * scale);
 }
 
-// دالة بتحول أي رقم لنص وتدعم لحد خانتين أو تلاتة (مضمونة ومفهومة)
 void uint_to_string(uint64_t num, char* out_str) {
     int i = 0;
     if (num == 0) {
         out_str[i++] = '0';
     } else {
-        // بناخد الخانات من اليمين للشمال
         while (num > 0) {
             out_str[i++] = (num % 10) + '0';
             num /= 10;
@@ -130,7 +125,6 @@ void uint_to_string(uint64_t num, char* out_str) {
     }
     out_str[i] = '\0';
 
-    // بنعكس الـ string عشان يطلع الترتيب مظبوط
     for (int j = 0; j < i / 2; j++) {
         char temp = out_str[j];
         out_str[j] = out_str[i - 1 - j];

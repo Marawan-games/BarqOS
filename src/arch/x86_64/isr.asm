@@ -37,19 +37,19 @@ isr_common:
     push r14
     push r15
 
-    mov rax, ds
-    push rax
+    ;mov rax, ds
+    ;push rax
 
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
+    ;mov ax, 0x10
+    ;mov ds, ax
+    ;mov es, ax
 
     mov rdi, rsp
     call isr_handler
 
-    pop rax
-    mov ds, ax
-    mov es, ax
+    ;pop rax
+    ;mov ds, ax
+    ;mov es, ax
 
     pop r15
     pop r14

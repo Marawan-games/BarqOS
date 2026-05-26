@@ -12,7 +12,7 @@ gdt_load:
 
     ;far jump
     push rsi                ; pushing the kernel code segment
-    lea rax, [reload_cs]    ; the label
+    lea rax, reload_cs      ; the label
     push rax                ; The RIP
     o64 retf                ; The far jump will take : CS then RIP (o64 to force it to use 64-bit)
 
@@ -23,6 +23,9 @@ reload_cs:
     mov es , ax
     mov fs , ax
     mov gs , ax
+
+    mov ax , 0x28
+    ltr ax
 
     ret
 

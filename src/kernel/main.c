@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <limine.h>
 #include <include.h>
-
+#include <../arch/x86_64/pic.h>
 
 // Set the base revision to 6 (the latest)
 
@@ -104,30 +104,23 @@ void kmain(void) {
 
     framebuffer_init() ;
 
-// 1. خلفية زرقاء داكنة جداً أو رمادي غامق شيك (بلاش الأسود السادة)
     cls(0x111424); 
 
-    // 2. برواز ثابت (Padding بـ 20 بكسل من كل اتجاه) عشان يظبط على أي Resolution
     uint32_t pad = 20;
-    uint32_t border_color = 0xFFC107; // اللون الذهبي بتاعك
-    
-    // رسم المستطيل (البرواز)
+    uint32_t border_color = 0xFFC107;
+
     draw_vertical_line(pad, border_color);
     draw_vertical_line(framebuffer->width - pad, border_color);
     draw_horizental_line(pad, border_color);
     draw_horizental_line(framebuffer->height - pad, border_color);
 
-    // 3. تظبيط الـ العناوين في النص (Centered Header)
-    // بنطرح نص عرض الكلمة تقريباً عشان تيجي في النص بالظبط
     current_y = 60; 
     print_step("   ⚡ BarqOS ⚡   ", 0xFFC107, 4); 
     print_step("Fast like lightning (Maybe)", 0xFFFFFF, 1);
 
-    // سطر فاصل تحت الـ Header
     current_y += 20;
     draw_horizental_line(current_y, 0x334155); 
 
-    // 4. منطقة الـ System Boot Logs (تحت بعض بنظافة)
     current_y += 40;
     
     print_step("[ OK ] Framebuffer Initialized.\n", 0x00d48d, 1);
@@ -140,27 +133,24 @@ void kmain(void) {
     idt_init();
     print_step(" [ DONE ]\n", 0x00d48d, 1);
 
-    print_step("[!] Triggering Test CPU Exception...", 0xFFC107, 1);
-
-
-    __asm__ volatile("int $8");
-    // 5. عاصفة الـ Exception
-    //volatile int a = 5;
-    //volatile int b = 0;
-    //volatile int c = a / b;
-
+    print_step( "RIQ intializing" , 0xFFFFFF , 1);
+    IRQ_Intialize(); 
     print_step(" [ DONE ]\n", 0x00d48d, 1);
+
+    //__asm__ volatile  ("int $0x20");
+    //__asm__ volatile  ("int $0x20");
+    __asm__ volatile ("sti");
 
     cursor_x = 1;
     cursor_y = 1;
     // We're done, just hang...
-    hcf();
+    while(1) {
+        __asm__ volatile("hlt");
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-// Why ??
-
 // Halt and catch fire function.
 void hcf(void) {
     for (;;) {

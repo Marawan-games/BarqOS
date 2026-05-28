@@ -134,12 +134,15 @@ void kmain(void) {
     print_step(" [ DONE ]\n", 0x00d48d, 1);
 
     print_step( "RIQ intializing" , 0xFFFFFF , 1);
+    disable_apic();
     IRQ_Intialize(); 
     print_step(" [ DONE ]\n", 0x00d48d, 1);
 
     //__asm__ volatile  ("int $0x20");
     //__asm__ volatile  ("int $0x20");
     __asm__ volatile ("sti");
+
+    
 
     cursor_x = 1;
     cursor_y = 1;
@@ -156,4 +159,9 @@ void hcf(void) {
     for (;;) {
         asm ("hlt");
     }
+}
+
+
+void disable_apic() {
+    __asm__ volatile ("mov $0x1B, %rcx\nrdmsr\nand $~0x800, %rax\nwrmsr"); 
 }

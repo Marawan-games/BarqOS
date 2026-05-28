@@ -21,4 +21,5 @@ void IRQs_Handler(Registers* regs) {
 void IRQ_Intialize() {
     pic_remap();
     __asm__ volatile ("sti");
+    g_IRQHandler[0] = timer_handler;
 }

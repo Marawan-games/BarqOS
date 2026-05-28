@@ -12,8 +12,4 @@ static inline uint8_t inb(uint16_t port) {
     return ret;
 }
 
-static inline void io_wait(void) {
-    __asm__ volatile("jmp 1f;1:jmp 1f;1:");
-}
-
 #endif

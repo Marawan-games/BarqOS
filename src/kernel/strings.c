@@ -1,7 +1,6 @@
-
+#include "strings.h"
 
 // Copied from OSdev wiki for future understanding & really intalizing them
-
 
 // GCC and Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
@@ -9,7 +8,7 @@
 // DO NOT remove or rename these functions, or stuff will eventually break!
 // They CAN be moved to a different .c file.
 
-/*void *memcpy(void *restrict dest, const void *restrict src, size_t n) {
+void *memcpy(void *restrict dest, const void *restrict src, size_t n) {
     uint8_t *restrict pdest = (uint8_t *restrict)dest;
     const uint8_t *restrict psrc = (const uint8_t *restrict)src;
 
@@ -59,5 +58,3 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 
     return 0;
 }
-
-*/

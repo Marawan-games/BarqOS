@@ -1,18 +1,18 @@
-# BarqOS (BQ0 Beta) 🚀⚡
+# BarqOS (v0 Beta) 🚀⚡
 
-Welcome to **BarqOS** (Codename: **BQ0**), a minimal, ultra-fast 64-bit operating system built completely from scratch using C and x86_64 Assembly. 
+Welcome to **BarqOS** (Codename: **v0**), a minimal, ultra-fast 64-bit operating system built completely from scratch using C and x86_64 Assembly. 
 
 BarqOS is developed under the umbrella of **Axiomil** as a modern hobbyist kernel designed for extreme performance, minimal resource consumption, and bare-metal reliability.
 
-> ⚠️ **Note:** This is the open-source **BQ0 Beta** release, focused strictly on core kernel infrastructure, kernel-space stability, and developer testing. Future commercial/enterprise layers will remain proprietary.
+> ⚠️ **Note:** This is the open-source **v0 Beta** release, focused strictly on core kernel infrastructure, kernel-space stability, and developer testing. Future commercial/enterprise layers will remain proprietary.
 
 ---
 
 ## 🧠 The Vision
 Most modern operating systems are bloated. BarqOS aims to prove that a sub-megabyte kernel, written with clean fundamentals, can deliver lightning-fast execution. The ultimate goal of the Axiomil ecosystem is to create a highly optimized environment where developers have total control over the hardware.
 
-## 🛠️ Current Features (BQ0 Setup)
-The BQ0 Beta strips away the overhead to focus on the absolute fundamentals:
+## 🛠️ Current Features (v0 Setup)
+The v0 Beta strips away the overhead to focus on the absolute fundamentals:
 * **The Boot & Core:** Native 64-bit kernel booting seamlessly.
 * **Hardware Interrupts:** Fully custom IDT (Interrupt Descriptor Table) with robust PIC remap and hardware handlers (including standard Timer & Keyboard support).
 * **Interactive Shell:** A minimalist command-line shell interface built directly into kernel space for direct testing.
@@ -30,7 +30,7 @@ The BQ0 Beta strips away the overhead to focus on the absolute fundamentals:
 
 ## 🚀 How to Run & Test
 ### Linux 🐧 :
-To test the BQ0 Beta on your local machine using the **QEMU emulator**, follow these steps:
+To test the v0 Beta on your local machine using the **QEMU emulator**, follow these steps:
 
 1. Clone the repository:
 ```bash
@@ -47,7 +47,7 @@ if you don't have it, just search how to install it on your OS
 ```
 ---
 ### Windows 🟦 :
-If you are on Windows, you can test the BQ0 Beta using QEMU by following these steps:
+If you are on Windows, you can test the v0 Beta using QEMU by following these steps:
 
 1. Download the repo or clone it if you have Git Bash.
 2. Ensure QEMU is installed and added to your System PATH.

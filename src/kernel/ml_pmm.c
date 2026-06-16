@@ -43,6 +43,7 @@ void ml_init() {
       // for safty only
       if (count_4kb == 0 && remaining_len >= PAGE_SIZE) {
         count_4kb = PAGE_SIZE;
+        // STILL WORKING ON THAT
       }
     }
   }

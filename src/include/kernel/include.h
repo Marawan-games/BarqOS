@@ -7,7 +7,7 @@
 #include <handlers.h>
 #include <irq.h>
 #include <limine.h>
-#include <lzml_pmm.h>
+#include <buddy_pmm.h>
 #include <pic.h>
 #include <port.h>
 #include <screen.h>

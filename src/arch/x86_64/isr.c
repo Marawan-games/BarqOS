@@ -18,14 +18,14 @@ void isr_handler(Registers *regs) {
   if (regs->int_no < 0x20) {
     hal_cls(0x4A0000);
     current_y = 267;
-    hal_print_centered(" !!! BARQ OS - KERNEL PANIC !!! ", 0xFFFFFF, 1);
-    hal_print_centered("SYSTEM HALTED DUE TO UNHANDLED EXCEPTION:", 0xFFC107,
+    hal_print(" !!! BARQ OS - KERNEL PANIC !!! \n", 0xFFFFFF, 1);
+    hal_print("SYSTEM HALTED DUE TO UNHANDLED EXCEPTION:\n\n", 0xFFC107,
                        1);
-    hal_print_centered("Vector -> ", 0xFFC107, 1);
+    hal_print("Vector -> ", 0xFFC107, 1);
     char buf[16];
     uint_to_string(regs->int_no, buf);
     hal_print(buf, 0xFFFFFF, 1);
-    hal_print_centered("The processor was forced to halt.", 0xDDDDDD, 1);
+    hal_print("The processor was forced to halt.", 0xDDDDDD, 1);
     while (1)
       ;
   }

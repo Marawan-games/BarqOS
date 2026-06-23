@@ -36,13 +36,4 @@ xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
 # Install Limine stage 1 and 2 for legacy BIOS boot.
 ./limine/limine bios-install image.iso
 
-cd ~/Documents/BarqOS
-
-qemu-system-x86_64 \
- -no-reboot \
- -d int,cpu_reset \
- -D qemu.log \
- -enable-kvm \
- -m 512 \
- -bios /usr/share/OVMF/OVMF_CODE.fd \
- -drive format=raw,file=image.iso
+cp /home/marawan/Documents/BarqOS/iso_root/boot/BarqOS  /mnt/data/boot/

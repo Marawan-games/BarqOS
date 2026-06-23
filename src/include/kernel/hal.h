@@ -13,9 +13,9 @@
 
 void hal_init();
 void hal_print(const char *str, uint32_t color, int scale);
-void hal_print_centered(char *text, uint32_t color, int scale);
 void hal_print_dec(uint64_t num, uint32_t color, int scale);
 void hal_print_hex(uint64_t num, uint32_t color, int scale);
 void hal_cls(uint32_t color);
+void hal_clear_line(uint32_t y, uint32_t height);
 
 #endif

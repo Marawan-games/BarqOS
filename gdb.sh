@@ -2,7 +2,8 @@
 qemu-system-x86_64 \
  -s -S \
  -no-reboot \
- -m 512 \
+ -m 1024 \
+ -enable-kvm \
  -bios /usr/share/OVMF/OVMF_CODE.fd \
  -drive format=raw,file=image.iso
  

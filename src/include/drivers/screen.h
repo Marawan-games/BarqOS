@@ -22,11 +22,10 @@ void draw_horizental_line(uint32_t Y, uint32_t color);
 void print_char(char c, uint32_t color, int scale);
 void print(const char *str, uint32_t color, int scale);
 void hcf(void);
-void print_centered(const char *text, int y, uint32_t color, int scale);
-void print_step(char *text, uint32_t color, int scale);
 void print_dec(uint64_t num, uint32_t color, int scale);
 void print_hex(uintptr_t num, uint32_t color, int scale);
 void uint_to_string(uint64_t num, char *out_str);
+void clear_line(uint32_t y, uint32_t height);
 void barqos_boot_splash();
 
 extern int current_y;

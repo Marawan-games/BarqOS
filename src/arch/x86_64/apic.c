@@ -10,29 +10,29 @@ void APIC_Intialize() {
   if (hhdm_request.response != NULL) {
     hhdm_offset = hhdm_request.response->offset;
   } else {
-    hal_print_centered("Limine HHDM response is NULL! Configuration error.",
+    hal_print("Limine HHDM response is NULL! Configuration error.",
                        0xff0000, 1);
     return;
   }
   uint32_t status = detect_apic();
   if (status == 0) {
     // no support, complete by PIC!
-    hal_print_centered("no support", 0xffffff, 1);
+    hal_print("no support", 0xffffff, 1);
     IRQ_Intialize_PIC();
   } else if (status == 1) {
     // disabled
-    hal_print_centered("disabled", 0xffffff, 1);
+    hal_print("disabled", 0xffffff, 1);
     outb(0x20, 0xFF); // check that PIC is not working
     outb(0x21, 0xFF);
     enable_apic();
   } else if (status == 2) {
     // enabled! , but check it again
-    hal_print_centered("enabled", 0xffffff, 1);
+    hal_print("enabled", 0xffffff, 1);
     outb(0x20, 0xFF); // check that PIC is not working
     outb(0x21, 0xFF);
     enable_apic();
   } else {
-    hal_print_centered("wtf is that, there is a problem in apic, it isn't "
+    hal_print("wtf is that, there is a problem in apic, it isn't "
                        "disabled,enabled or supported",
                        0xffffff, 1);
   }
@@ -58,7 +58,7 @@ void WriteRegister(uint32_t reg, uint32_t value) {
 
 void enable_apic() {
   // Let's enable apic
-  hal_print_centered("apic will be enabled now!", 0xffffff, 1);
+  hal_print("apic will be enabled now!", 0xffffff, 1);
   // enabling bit 11 (global apic enable)
   uint64_t apic_base_msr = GetMSR(IA32_APIC_BASE_MSR);
   SetMSR(IA32_APIC_BASE_MSR, apic_base_msr | IA32_APIC_BASE_MSR_ENABLE);

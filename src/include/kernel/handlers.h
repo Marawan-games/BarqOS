@@ -2,7 +2,8 @@
 #define HANDLERS_H
 
 #include <hal.h>
-#include <screen.h>
+
+extern int current_y;
 void c_divide_by_zero_handler();
 
 #endif

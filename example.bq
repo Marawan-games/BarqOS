@@ -1,0 +1,13 @@
+comment: this is our comments!
+comment: this is our include !
+
+get_header "example.h"
+
+comment: not important to write "void" or any type, it is detected automaticly!
+
+main {
+    comment: Here is the code
+    print ( text : "example" , color : "red") comment: no simi colomns, the parmeters have names
+                                              comment:    so you can write them in any order!
+    comment: This was the way to make a multiline comment !   
+}

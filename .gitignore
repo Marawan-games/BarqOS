@@ -3,6 +3,9 @@ bin/
 obj/
 iso_root/
 
+#Limine
+limine/
+
 # uunimportant images
 Barq went Crazy/
 

@@ -14,6 +14,7 @@ __attribute__((
     section(".limine_requests"))) volatile struct limine_framebuffer_request
     framebuffer_request = {.id = LIMINE_FRAMEBUFFER_REQUEST_ID, .revision = 0};
 
+// the required requests in PMM
 // HigherHalf Direct Map request
 
 __attribute__((used,
